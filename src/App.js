@@ -10,8 +10,8 @@ import Footer from './Components/Footer/Footer';
 class App extends Component {
   state = {
       // Set the main Style
-    objStyle: {
-      backgroundColor: '#edb31c'
+      objStyle: {
+         backgroundColor: '#edb31c'
       },
       colors : [
                 { id: 1, name: 'violet', color: '#f5aafb'},
@@ -59,7 +59,7 @@ class App extends Component {
   };
 
   addRandomColor = (e) => {
-	e.preventDefault();
+	e.persist();
 	const hexValues = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e'];
 	const newHexColorArr = [];
 	for (let i = 0; i < 6; i++) {
@@ -67,13 +67,10 @@ class App extends Component {
 		newHexColorArr.push(newValue);
 	}
 	const newHexColor = newHexColorArr.join('');
-	this.setState({
-		newColorColor : `#${newHexColor}`
-	});
 
-	var myHeaders = new Headers();
+	const myHeaders = new Headers();
 
-	var myInit = { method: 'GET',
+	const myInit = { method: 'GET',
                headers: myHeaders,
                mode: 'no-cors',
                cache: 'default' };
@@ -84,15 +81,36 @@ class App extends Component {
 	})
 	.then( color => {
 		this.setState({
-			newColorName: color.name.value
+			newColorName: color.name.value,
+         newColorColor: `#${newHexColor}`
 		});
+      this.addNewcolor(e);
 	})
 	.catch(err => {
 		console.log(err);
 	})
   }
+  componentWillMount() {
+     if (localStorage.getItem('colors')) {
+       this.setState({
+         colors: JSON.parse(localStorage.getItem('colors'))
+      });
+   }
+ }
+
+  componentDidUpdate() {
+     const currentColors = this.state.colors;
+     localStorage.setItem('colors', JSON.stringify(currentColors));
+      // this.setState({
+      //    colors : localStorage.getItem('colors')
+      // });
+      console.log(localStorage.getItem('colors'));
+ }
 
   render() {
+
+
+
     return (
       <div className="App">
 		<Header objStyle={this.state.objStyle}/>
@@ -122,12 +140,9 @@ class App extends Component {
 				changeNewColor={this.changeNewColor}
 				newColorName={this.state.newColorName}
 				newColorColor={this.state.newColorColor}
+            addRandomColor={this.addRandomColor}
 			/>
-			<button
-			  onClick={this.addRandomColor}
-			>
-			  Random Color
-			</button>
+
         </section>
 
 	<Footer color={this.state.objStyle}/>

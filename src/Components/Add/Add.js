@@ -38,6 +38,13 @@ const Add = (props) =>
   >
 	  Add new color !
   </button>
+  <button
+	  type='button'
+	 onClick={props.addRandomColor}
+	 style={{backgroundColor: props.color}}
+  >
+	 Random Color
+  </button>
 </form>;
 
 export default Add;
