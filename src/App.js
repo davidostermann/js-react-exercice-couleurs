@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
+import fetchJsonp from 'fetch-jsonp';
 import './App.css';
-import {ChromePicker} from 'react-color';
+// import {ChromePicker} from 'react-color';
+import Header from './Components/Header/Header';
+import ColorList from './Components/ColorList/ColorList';
+import Add from './Components/Add/Add';
+import Footer from './Components/Footer/Footer';
 
 class App extends Component {
   state = {
@@ -54,16 +58,44 @@ class App extends Component {
     });
   };
 
+  addRandomColor = (e) => {
+	e.preventDefault();
+	const hexValues = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e'];
+	const newHexColorArr = [];
+	for (let i = 0; i < 6; i++) {
+		let newValue = hexValues[Math.floor(Math.random() * hexValues.length)];
+		newHexColorArr.push(newValue);
+	}
+	const newHexColor = newHexColorArr.join('');
+	this.setState({
+		newColorColor : `#${newHexColor}`
+	});
+
+	var myHeaders = new Headers();
+
+	var myInit = { method: 'GET',
+               headers: myHeaders,
+               mode: 'no-cors',
+               cache: 'default' };
+
+	fetchJsonp(`http://thecolorapi.com/id?hex=${newHexColor}`, myInit)
+	.then( res => {
+		return res.json();
+	})
+	.then( color => {
+		this.setState({
+			newColorName: color.name.value
+		});
+	})
+	.catch(err => {
+		console.log(err);
+	})
+  }
+
   render() {
     return (
       <div className="App">
-        <div className="App-header" style={this.state.objStyle}>
-          <img src={logo} className="App-logo" alt="logo"/>
-          <div>
-            <i className='fa fa-arrow-up'></i>
-          </div>
-          <h1>This logo is not a button anymore..</h1>
-        </div>
+		<Header objStyle={this.state.objStyle}/>
         <section>
 
           <h2 style={{
@@ -78,58 +110,28 @@ class App extends Component {
           </div>
 
           {/* BUTTONS LIST */}
-          <ul>
-            {this.state.colors.map(item => <li key={item.id}>
-              <button
-                  style={{ backgroundColor: item.color }}
-                  onClick={() => this.changeColor(item.color)}>
-				  {item.name}
-              </button>
-            </li>)}
-          </ul>
+			<ColorList
+				colors={this.state.colors}
+				changeColor={this.changeColor}
+			/>
 
           {/* FORM TO ADD BUTTONS */}
-          <form
-			  onSubmit={this.addNewcolor}
-			  style={{ borderColor: this.state.objStyle.backgroundColor }}>
-            <p>
-              Add a new color :
-            </p>
-            <p>
-              <label htmlFor="newColorName">Name :</label>
-              <input
-				  type="text"
-				  name="newColorName"
-				  style={{ color: this.state.newColorColor}}
-				  onChange={this.changeNewColor}
-				  value={this.state.newColorName}
-			  />
-            </p>
-            <p>
-              <label htmlFor="newColorColor">Color (HEX) :</label>
-              <input
-				  type="text"
-                  name="newColorColor"
-                  style={{ color: this.state.objStyle.backgroundColor }}
-				  onChange={this.changeNewColor}
-				  value={this.state.newColorColor}/>
-            </p>
-            <ChromePicker
-				onChangeComplete={this.changeColorPicker}
+			<Add
+				color={this.state.objStyle.backgroundColor}
+				addNewcolor={this.addNewcolor}
+				changeNewColor={this.changeNewColor}
+				newColorName={this.state.newColorName}
+				newColorColor={this.state.newColorColor}
 			/>
-            <button
-				type='submit'
-				style={{ color: this.state.objStyle.backgroundColor }}
-                >
-				Add new color !
+			<button
+			  onClick={this.addRandomColor}
+			>
+			  Random Color
 			</button>
-          </form>
         </section>
 
-        <footer style={this.state.objStyle}>
-          <p>Powered with Create React App</p>
-        </footer>
-      </div>
+	<Footer color={this.state.objStyle}/>
+</div>
     );
   }
 }
