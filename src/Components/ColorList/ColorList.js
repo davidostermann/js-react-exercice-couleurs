@@ -7,10 +7,11 @@ const ColorList = (props) =>
 			{props.colors.map((item, i) =>
 				<ListItem
 					key={i}
-					id={item.id}
+					id={i}
 					color={item.color}
 					name={item.name}
 					changeColor={props.changeColor}
+					deleteItem={props.deleteItem}
 				/>
 			)}
 		</ul>;
