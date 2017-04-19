@@ -94,24 +94,15 @@ class ColorPicker extends Component {
     }
     const newHexColor = newHexColorArr.join('');
 
-    // fetchJsonp(`http://thecolorapi.com/id?hex=${newHexColor}`).then(res => {
-    //   return res.json();
-    // }).then(color => {
-    //   this.setState({newColorName: color.name.value, newColorColor: `#${newHexColor}`});
-    //   this.addNewcolor(e);
-    // }).catch(err => {
-    //   console.log(err);
-    // });
+    fetchJsonp(`http://thecolorapi.com/id?hex=${newHexColor}`).then(res => {
+      return res.json();
+    }).then(color => {
+      this.setState({newColorName: color.name.value, newColorColor: `#${newHexColor}`});
+      this.addNewcolor(e);
+    }).catch(err => {
+      console.log(err);
+    });
 
-	fetchJsonp(`http://thecolorapi.com/scheme?hex=${newHexColor}&count=3&mode=analogic`).then(res => {
-	  return res.json();
-	}).then(color => {
-		console.log(color);
-	//   this.setState({newColorName: color.name.value, newColorColor: `#${newHexColor}`});
-	//   this.addNewcolor(e);
-	}).catch(err => {
-	  console.log(err);
-	});
   }
 
   // ===== Local Storage =====

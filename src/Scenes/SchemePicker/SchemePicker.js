@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import fetchJsonp from 'fetch-jsonp';
 import './SchemePicker.css';
-// import {ChromePicker} from 'react-color';
 import Header from './../../Components/Header/Header';
 import ColorList from './../../Components/ColorList/ColorList';
 import Add from './../../Components/Add/Add';
