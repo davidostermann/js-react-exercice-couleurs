@@ -1,0 +1,28 @@
+body {
+	color: rgb(70, 70, 68);
+}
+
+.App {
+    text-align: center;
+}
+
+.fa {
+    position: relative;
+    animation: arrow-up-down 2s ease-in-out infinite;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+@keyframes arrow-up-down {
+    0%, 100% {
+        top: -5px;
+    }
+    50% {
+        top: 5px;
+    }
+}
